@@ -1,11 +1,9 @@
-console.log(add(1, 2))
-console.log(subtract(1, 2))
-console.log(multiply(2, 0))
-console.log(divide(1, 3))
-
 const OP = '';
 const num1 = '';
 const num2 = '';
+
+const btns = document.querySelector('.btn-grid')
+console.log(btns)
 
 function operate(OP, num1, num2) {
   let result = ''
@@ -17,7 +15,7 @@ function operate(OP, num1, num2) {
     case "-":
       result = subtract(num1, num2);
       break;
-    case "*":
+    case "x":
       result = multiply(num1, num2);
       break;
     case "%":

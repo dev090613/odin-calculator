@@ -1,0 +1,15 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  border: solid 1px black;
+  display: flex;
+  flex-direction: column;
+  min-width: 500px;
+}
+
+
+

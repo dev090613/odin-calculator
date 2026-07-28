@@ -1,9 +1,27 @@
 const OP = '';
 const num1 = '';
 const num2 = '';
+const screenCurrent = document.querySelector('.screen-current')
+const screenPrev = document.querySelector('.screen-prev')
 
 const btns = document.querySelector('.btn-grid')
-console.log(btns)
+btns.addEventListener('click', (e) => {
+  console.log(e.target);
+  if (e.target.id === "clearBtn") {
+    // TODO
+    pressClear();
+  } else if (e.target.id === "deleteBtn") {
+    // TODO
+  } else {
+    // TODo
+  }
+})
+
+function pressClear() {
+  screenCurrent.textContent = 0;
+  screenPrev.textContent = ' ';
+}
+
 
 function operate(OP, num1, num2) {
   let result = ''

@@ -1,80 +1,64 @@
-const HISTORY = [];
 const screenCurrent = document.querySelector('.screen-current')
 const screenPrev = document.querySelector('.screen-prev')
+
+let num1 = ''
+let operator = ''
+let num2 = ''
+let isCalculated = false;
+const operators = ['+', '-', 'x', '/']
 
 const btns = document.querySelector('.btn-grid')
 btns.addEventListener('click', (e) => {
   if (!e.target.matches('button')) return;
-  const button = e.target;
+  const val = e.target.textContent;
 
-  if (e.target.id === "clearBtn") {
-    pressClearBtn();
-  } else if (e.target.id === "deleteBtn") {
-    pressDelBtn();
+  if (val === 'CLEAR') {
+    pressClearBtn()
+  } else if (val === 'DELETE') {
+    pressDelBtn()
+  } else if (val === '=') {
+    handleEqual()
+  } else if (operators.includes(val)) {
+    handleOperator(val)
   } else {
-    const val = button.textContent;
-    pressSmallBtn(val);
+    handleNumber(val)
   }
+
+  updateDisplay();
 })
 
+function updateDisplay() {
+  // 보조 화면 - operator 유무에 따라
+  if (operator === '') {
+    screenPrev.textContent = '';
+  } else {
+    screenPrev.textContent = `${num1} {operator}`;
+  }
+  // 메인 화면
+  if (num2 !== '') {
+    screenCurrent.textContent = num2;
+  } else if (num1 === '') {
+    screenCurrent.textContent = '0';
+  } else {
+    screenCurrent.textContent = num1;
+  }
+}
+
 function pressDelBtn() {
-  let current = screenCurrent.textContent
-
-  if (current.length === 0) {
-    return;
-  } else if (curVal.length === 1) {
-    screenCurrent.textContent = '0'
-    curVal = '0'
-    return;
-  }
-
-  screenCurrent.textContent = current.slice(0, -1);
-  return;
-}
-
-const OPs = ['+', '-', 'x', '/']
-let op = '';
-let curVal = '0'
-function pressSmallBtn(val) {
-  if (OPs.includes(val)) {
-    let num1 = screenCurrent.textContent
-    screenPrev.textContent = num1 + val
-    curVal = '0'
-  } else if (val === '=') {
-    if (Number.isInteger(Number(screenPrev.textContent))) {
-      return ;
-    }
-    operate() ;
-  } else if (val === '.') {
-    if (screenCurrent.textContent.includes('.')) 
-      return ;
-    screenCurrent.textContent += '.'
-    curVal += '.'
-
-  } else {
-    screenCurrent.textContent = updateCurVal(val)
+  if (num2 !== '') {
+    num2 = num2.slice(0, -1);
+  } else if (operator !== '') {
+    operator = ''
+  } else if (num1 !== '') {
+    num1 = num1.slice(0, -1);
   }
 }
 
-function updateCurVal(val) {
+function handleNumber(val){}
 
-  if (curVal === '0') {
-    curVal = val;
-  } else {
-    if (curVal.length > 13) return;
-    curVal += val;
-  }
-  return curVal;
-}
+function handleEqual() {}
 
-function pressClearBtn() {
-  screenCurrent.textContent = '0';
-  screenPrev.textContent = '';
-  curVal = '0'
-}
-
-function getCurVal() {
-  return screenCurrent.textContent
+function handleOperator(val) {
 }
 
 function operate() {
@@ -103,7 +87,7 @@ function operate() {
       break;
   }
 
-  curVal = String(result);
+  curVal = '0'
   screenPrev.textContent = ' '
   screenCurrent.textContent = String(result)
 }
@@ -121,7 +105,10 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
-  return num1 / num2
+  if (num2 === 0) {
+    return "Can't divide by zero"
+  }
+  return num1 / num2;
 }
 
 const yearSpan = document.querySelector('#year')

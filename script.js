@@ -1,6 +1,4 @@
-const OP = '';
-const num1 = '';
-const num2 = '';
+const HISTORY = [];
 const screenCurrent = document.querySelector('.screen-current')
 const screenPrev = document.querySelector('.screen-prev')
 
@@ -28,12 +26,17 @@ function pressDelBtn() {
   console.log("TODO");
 }
 
+const OPs = ['+', '-', 'x', '/']
+let num1 = '';
+let op = '';
 function pressSmallBtn(val) {
-  console.log(val);
-  if (['+', '-', 'x', '%'].includes(val)) {
-    // TODO
+  if (OPs.includes(val)) {
+    num1 = screenCurrent.textContent;
+    op = val
+    screenPrev.textContent = num1 + op
+    currentVal = '0'
   } else if (val === '=') {
-    // TODO
+    operate();
   } else {
     updateCurVal(val);
     screenCurrent.textContent = currentVal;
@@ -63,10 +66,15 @@ function pressClearBtn() {
 }
 
 
-function operate(OP, num1, num2) {
-  let result = ''
+function operate() {
+  const screenPrevVal = screenPrev.textContent;
 
-  switch (OP) {
+  const num1 = Number(screenPrevVal.slice(0,-1))
+  const op = screenPrevVal.at(-1);
+  const num2 = Number(screenCurrent.textContent);
+
+  let result = 0
+  switch (op) {
     case "+":
       result = add(num1, num2);
       break;
@@ -76,11 +84,13 @@ function operate(OP, num1, num2) {
     case "x":
       result = multiply(num1, num2);
       break;
-    case "%":
+    case "/":
       result = divide(num1, num2);
       break;
   }
-  return result;
+
+  screenPrev.textContent = ' '
+  screenCurrent.textContent = String(result)
 }
 
 function add(num1, num2) {

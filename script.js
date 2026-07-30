@@ -2,19 +2,14 @@ const HISTORY = [];
 const screenCurrent = document.querySelector('.screen-current')
 const screenPrev = document.querySelector('.screen-prev')
 
-let currentVal = '0'
-let prevVal = ''
-
 const btns = document.querySelector('.btn-grid')
 btns.addEventListener('click', (e) => {
   if (!e.target.matches('button')) return;
   const button = e.target;
 
   if (e.target.id === "clearBtn") {
-    console.log(button)
     pressClearBtn();
   } else if (e.target.id === "deleteBtn") {
-    console.log(button)
     pressDelBtn();
   } else {
     const val = button.textContent;
@@ -23,50 +18,67 @@ btns.addEventListener('click', (e) => {
 })
 
 function pressDelBtn() {
-  console.log("TODO");
+  let current = screenCurrent.textContent
+
+  if (current.length === 0) {
+    return;
+  } else if (curVal.length === 1) {
+    screenCurrent.textContent = '0'
+    curVal = '0'
+    return;
+  }
+
+  screenCurrent.textContent = current.slice(0, -1);
+  return;
 }
 
 const OPs = ['+', '-', 'x', '/']
-let num1 = '';
 let op = '';
+let curVal = '0'
 function pressSmallBtn(val) {
   if (OPs.includes(val)) {
-    num1 = screenCurrent.textContent;
-    op = val
-    screenPrev.textContent = num1 + op
-    currentVal = '0'
+    let num1 = screenCurrent.textContent
+    screenPrev.textContent = num1 + val
+    curVal = '0'
   } else if (val === '=') {
-    operate();
+    if (Number.isInteger(Number(screenPrev.textContent))) {
+      return ;
+    }
+    operate() ;
+  } else if (val === '.') {
+    if (screenCurrent.textContent.includes('.')) 
+      return ;
+    screenCurrent.textContent += '.'
+    curVal += '.'
+
   } else {
-    updateCurVal(val);
-    screenCurrent.textContent = currentVal;
+    screenCurrent.textContent = updateCurVal(val)
   }
 }
 
 function updateCurVal(val) {
-  if (val === '.' && currentVal.includes('.')) {
-    return;
-  }
 
-  if (currentVal === '0') {
-    currentVal = val;
+  if (curVal === '0') {
+    curVal = val;
   } else {
-    if (currentVal.length > 13) return;
-    currentVal += val;
+    if (curVal.length > 13) return;
+    curVal += val;
   }
-  return;
+  return curVal;
 }
 
 function pressClearBtn() {
-  currentVal = '0';
-  prevVal = ' ';
-
-  screenCurrent.textContent = currentVal;
-  screenPrev.textContent = prevVal;
+  screenCurrent.textContent = '0';
+  screenPrev.textContent = '';
+  curVal = '0'
 }
 
+function getCurVal() {
+  return screenCurrent.textContent
+}
 
 function operate() {
+  console.log("function operate started")
   const screenPrevVal = screenPrev.textContent;
 
   const num1 = Number(screenPrevVal.slice(0,-1))
@@ -87,8 +99,11 @@ function operate() {
     case "/":
       result = divide(num1, num2);
       break;
+    default:
+      break;
   }
 
+  curVal = String(result);
   screenPrev.textContent = ' '
   screenCurrent.textContent = String(result)
 }

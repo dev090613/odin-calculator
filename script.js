@@ -4,22 +4,62 @@ const num2 = '';
 const screenCurrent = document.querySelector('.screen-current')
 const screenPrev = document.querySelector('.screen-prev')
 
+let currentVal = '0'
+let prevVal = ''
+
 const btns = document.querySelector('.btn-grid')
 btns.addEventListener('click', (e) => {
-  console.log(e.target);
+  if (!e.target.matches('button')) return;
+  const button = e.target;
+
   if (e.target.id === "clearBtn") {
-    // TODO
-    pressClear();
+    console.log(button)
+    pressClearBtn();
   } else if (e.target.id === "deleteBtn") {
-    // TODO
+    console.log(button)
+    pressDelBtn();
   } else {
-    // TODo
+    const val = button.textContent;
+    pressSmallBtn(val);
   }
 })
 
-function pressClear() {
-  screenCurrent.textContent = 0;
-  screenPrev.textContent = ' ';
+function pressDelBtn() {
+  console.log("TODO");
+}
+
+function pressSmallBtn(val) {
+  console.log(val);
+  if (['+', '-', 'x', '%'].includes(val)) {
+    // TODO
+  } else if (val === '=') {
+    // TODO
+  } else {
+    updateCurVal(val);
+    screenCurrent.textContent = currentVal;
+  }
+}
+
+function updateCurVal(val) {
+  if (val === '.' && currentVal.includes('.')) {
+    return;
+  }
+
+  if (currentVal === '0') {
+    currentVal = val;
+  } else {
+    if (currentVal.length > 13) return;
+    currentVal += val;
+  }
+  return;
+}
+
+function pressClearBtn() {
+  currentVal = '0';
+  prevVal = ' ';
+
+  screenCurrent.textContent = currentVal;
+  screenPrev.textContent = prevVal;
 }
 
 

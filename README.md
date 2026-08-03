@@ -1,3 +1,3 @@
 Project Calculator
 
-[Live demo !](https://www.theodinproject.com/lessons/foundations-calculator)
+[Live demo !](https://dev090613.github.io/odin-calculator/)

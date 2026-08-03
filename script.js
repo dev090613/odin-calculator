@@ -147,7 +147,7 @@ function operate(n1, op, n2) {
   if (typeof result === 'string')
     return result;
 
-  return Math.round(result * 10000) / 10000;
+  return Math.round(result * 10000000) / 10000000;
 }
 
 function add(num1, num2) {

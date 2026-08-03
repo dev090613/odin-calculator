@@ -68,23 +68,32 @@ function pressDelBtn() {
 
 function handleNumber(digit){
   if (isCalculated && operator === '') {
-    num1 = digit;
+    if (digit === '.') {
+      num1 = '0.'
+    } else {
+      num1 = digit;
+    }
     isCalculated = false
     return;
   }
+
   if (operator === '') {
     if (digit === '.' && num1.includes('.'))
       return;
+    if (num1 === '' && digit === '.') 
+      num1 = "0";
     num1 = (num1 === '0' && digit !== '.') ? digit : num1 + digit;
   } else {
     if (digit === '.' && num2.includes('.'))
       return;
+    if (num2 === '' && digit === '.')
+      num2 = "0";
     num2 = (num2 === '0' && digit !== '.') ? digit : num2 + digit;
   }
 }
 
 function handleEqual() {
-  if (num1 === "Can't divide by zero")
+  if (num1 === "Can't divide by '0'")
     num1 = 0;
 
   if (num1 === '' || num2 === '' || operator === '') 
@@ -98,7 +107,7 @@ function handleEqual() {
 }
 
 function handleOperator(op) {
-  if (num1 === "Can't divide by zero")
+  if (num1 === "Can't divide by '0'")
     num1 = 0;
 
   if (num1 === '')
@@ -135,7 +144,10 @@ function operate(n1, op, n2) {
       break;
   }
 
-  return result;
+  if (typeof result === 'string')
+    return result;
+
+  return Math.round(result * 10000) / 10000;
 }
 
 function add(num1, num2) {
@@ -152,10 +164,9 @@ function multiply(num1, num2) {
 
 function divide(num1, num2) {
   if (num2 === 0) {
-    return "Can't divide by zero"
+    return "Can't divide by '0'"
   }
-
-  return Math.round((num1 / num2) * 10000) / 10000;
+  return num1 / num2;
 }
 
 const yearSpan = document.querySelector('#year')

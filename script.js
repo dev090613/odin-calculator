@@ -25,6 +25,9 @@ btns.addEventListener('click', (e) => {
   }
 
   updateDisplay();
+  console.log(num1)
+  console.log(operator)
+  console.log(num2)
 })
 
 function updateDisplay() {
@@ -32,7 +35,7 @@ function updateDisplay() {
   if (operator === '') {
     screenPrev.textContent = '';
   } else {
-    screenPrev.textContent = `${num1} {operator}`;
+    screenPrev.textContent = `${num1} ${operator}`;
   }
   // 메인 화면
   if (num2 !== '') {
@@ -44,6 +47,13 @@ function updateDisplay() {
   }
 }
 
+function pressClearBtn() {
+  num1 = '';
+  operator = '';
+  num2 = ''
+  isCalculated = false;
+}
+
 function pressDelBtn() {
   if (num2 !== '') {
     num2 = num2.slice(0, -1);
@@ -52,44 +62,80 @@ function pressDelBtn() {
   } else if (num1 !== '') {
     num1 = num1.slice(0, -1);
   }
+
+  isCalculated = false
 }
 
-function handleNumber(val){}
-
-function handleEqual() {}
-
-function handleOperator(val) {
+function handleNumber(digit){
+  if (isCalculated && operator === '') {
+    num1 = digit;
+    isCalculated = false
+    return;
+  }
+  if (operator === '') {
+    if (digit === '.' && num1.includes('.'))
+      return;
+    num1 = (num1 === '0' && digit !== '.') ? digit : num1 + digit;
+  } else {
+    if (digit === '.' && num2.includes('.'))
+      return;
+    num2 = (num2 === '0' && digit !== '.') ? digit : num2 + digit;
+  }
 }
 
-function operate() {
-  console.log("function operate started")
-  const screenPrevVal = screenPrev.textContent;
+function handleEqual() {
+  if (num1 === "Can't divide by zero")
+    num1 = 0;
 
-  const num1 = Number(screenPrevVal.slice(0,-1))
-  const op = screenPrevVal.at(-1);
-  const num2 = Number(screenCurrent.textContent);
+  if (num1 === '' || num2 === '' || operator === '') 
+    return;
+
+  const result = operate(Number(num1), operator, Number(num2))
+  num1 = String(result);
+  num2 = '';
+  operator = '';
+  isCalculated = true;
+}
+
+function handleOperator(op) {
+  if (num1 === "Can't divide by zero")
+    num1 = 0;
+
+  if (num1 === '')
+    num1 = '0';
+
+  if (num1 !== '' && operator !== '' && num2 !== '') {
+    num1 = String(
+      operate(Number(num1), operator, Number(num2))
+    )
+    num2 = '';
+  }
+
+  operator = op;
+  isCalculated = false
+}
+
+function operate(n1, op, n2) {
 
   let result = 0
   switch (op) {
     case "+":
-      result = add(num1, num2);
+      result = add(n1, n2);
       break;
     case "-":
-      result = subtract(num1, num2);
+      result = subtract(n1, n2);
       break;
     case "x":
-      result = multiply(num1, num2);
+      result = multiply(n1, n2);
       break;
     case "/":
-      result = divide(num1, num2);
+      result = divide(n1, n2);
       break;
     default:
       break;
   }
 
-  curVal = '0'
-  screenPrev.textContent = ' '
-  screenCurrent.textContent = String(result)
+  return result;
 }
 
 function add(num1, num2) {
@@ -108,7 +154,8 @@ function divide(num1, num2) {
   if (num2 === 0) {
     return "Can't divide by zero"
   }
-  return num1 / num2;
+
+  return Math.round((num1 / num2) * 10000) / 10000;
 }
 
 const yearSpan = document.querySelector('#year')
